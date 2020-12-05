@@ -19,6 +19,7 @@ dependencies {
     testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine:5.3.1'
 
     testImplementation 'org.assertj:assertj-core:3.+'
+    testCompile 'org.mockito:mockito-core:3.3.3'
 }
 
 // Define the main class for the application
