@@ -12,7 +12,7 @@ public class App {
         if (!isValidArgument(args)) {
             exit(ERROR_CODE);
         } else {
-            photoService.retrievePhotos(args[0]);
+            photoService.retrievePhotosIdsAndTitles(args[0]);
         }
     }
 

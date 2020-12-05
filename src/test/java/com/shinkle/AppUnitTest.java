@@ -8,24 +8,18 @@ import java.util.Collections;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.*;
 
-public class AppTest {
+public class AppUnitTest {
 
-    //    OutputStream consoleText;
-//    PrintStream console;
     App app;
-
-    private int errorCode;
+    int actualErrorCode;
 
     @BeforeEach
     void setup() {
-//        consoleText = new ByteArrayOutputStream();
-//        console = System.out;
-//        System.setOut(new PrintStream(consoleText));
-        errorCode = 0;
+        actualErrorCode = 0;
         app = new App() {
             @Override
             public void exit(int errorCode) {
-                AppTest.this.errorCode = errorCode;
+                AppUnitTest.this.actualErrorCode = errorCode;
             }
         };
     }
@@ -34,11 +28,11 @@ public class AppTest {
     void shouldCallPhotoServiceWithArgs() {
         String expectedAlbumId = "1";
         PhotoService mockPhotoService = mock(PhotoService.class);
-        when(mockPhotoService.retrievePhotos(expectedAlbumId)).thenReturn(Collections.emptyList());
+        when(mockPhotoService.retrievePhotosIdsAndTitles(expectedAlbumId)).thenReturn(Collections.emptyList());
 
         app.execute(mockPhotoService, expectedAlbumId);
 
-        verify(mockPhotoService, only()).retrievePhotos(expectedAlbumId);
+        verify(mockPhotoService, only()).retrievePhotosIdsAndTitles(expectedAlbumId);
     }
 
     @Test
@@ -48,7 +42,7 @@ public class AppTest {
         app.execute(mockPhotoService);
 
         verifyNoInteractions(mockPhotoService);
-        assertThat(errorCode).isEqualTo(1);
+        assertThat(actualErrorCode).isEqualTo(1);
     }
 
     @Test
@@ -58,8 +52,6 @@ public class AppTest {
         app.execute(mockPhotoService, "one");
 
         verifyNoInteractions(mockPhotoService);
-        assertThat(errorCode).isEqualTo(1);
+        assertThat(actualErrorCode).isEqualTo(1);
     }
-
-
 }

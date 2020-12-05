@@ -1,10 +1,19 @@
 package com.shinkle;
 
+import org.springframework.web.reactive.function.client.WebClient;
+
 import java.util.List;
 
 public class PhotoService {
 
-    public List<String> retrievePhotos(String albumId) {
+    WebClient webClient;
+
+    public PhotoService(WebClient webClient) {
+        this.webClient = webClient;
+    }
+
+    public List<String> retrievePhotosIdsAndTitles(String albumId) {
+
         return null;
     }
 }
