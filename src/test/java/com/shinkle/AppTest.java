@@ -5,6 +5,7 @@ import org.junit.jupiter.api.Test;
 
 import java.util.Collections;
 
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.*;
 
 public class AppTest {
@@ -13,22 +14,49 @@ public class AppTest {
 //    PrintStream console;
     App app;
 
+    private int errorCode;
+
     @BeforeEach
     void setup() {
 //        consoleText = new ByteArrayOutputStream();
 //        console = System.out;
 //        System.setOut(new PrintStream(consoleText));
-        app = new App();
+        app = new App() {
+            @Override
+            public void exit(int errorCode) {
+                AppTest.this.errorCode = errorCode;
+            }
+        };
     }
 
     @Test
     void shouldCallPhotoServiceWithArgs() {
-        String expectedAlbumId = "someAlbumId";
-        PhotoService photoService = mock(PhotoService.class);
-        when(photoService.retrievePhotos(expectedAlbumId)).thenReturn(Collections.emptyList());
+        String expectedAlbumId = "1";
+        PhotoService mockPhotoService = mock(PhotoService.class);
+        when(mockPhotoService.retrievePhotos(expectedAlbumId)).thenReturn(Collections.emptyList());
 
-        app.execute(photoService, expectedAlbumId);
+        app.execute(mockPhotoService, expectedAlbumId);
 
-        verify(photoService, only()).retrievePhotos(expectedAlbumId);
+        verify(mockPhotoService, only()).retrievePhotos(expectedAlbumId);
+    }
+
+    @Test
+    void shouldExitWithErrorCodeOneWithNoArgs() {
+        PhotoService mockPhotoService = mock(PhotoService.class);
+
+        app.execute(mockPhotoService);
+
+        verifyNoInteractions(mockPhotoService);
+        assertThat(App.ERROR_CODE).isEqualTo(1);
+    }
+
+    @Test
+    void shouldExitWithErrorCodeOneWithNonIntArg() {
+        PhotoService mockPhotoService = mock(PhotoService.class);
+
+        app.execute(mockPhotoService, "one");
+
+        verifyNoInteractions(mockPhotoService);
+        assertThat(App.ERROR_CODE).isEqualTo(1);
     }
 }

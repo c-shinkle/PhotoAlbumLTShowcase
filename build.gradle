@@ -11,15 +11,13 @@ repositories {
 
 dependencies {
     implementation 'com.google.guava:guava:27.0.1-jre'
-
-    compile 'org.springframework.boot:spring-boot-starter-webflux'
-    compile 'org.projectreactor:reactor-spring:1.0.1.RELEASE'
+    implementation 'org.springframework.boot:spring-boot-starter-webflux'
+    implementation 'org.projectreactor:reactor-spring:1.0.1.RELEASE'
 
     testImplementation 'org.junit.jupiter:junit-jupiter-api:5.3.1'
-    testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine:5.3.1'
-
     testImplementation 'org.assertj:assertj-core:3.+'
-    testCompile 'org.mockito:mockito-core:3.3.3'
+    testImplementation 'org.mockito:mockito-core:3.3.3'
+    testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine:5.3.1'
 }
 
 // Define the main class for the application

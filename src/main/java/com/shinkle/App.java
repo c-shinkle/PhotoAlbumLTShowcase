@@ -2,21 +2,30 @@ package com.shinkle;
 
 public class App {
 
-//    private static App app = null;
-//
-//    public static App current() {
-//        return app;
-//    }
-
-    public void execute(PhotoService photoService, String... args) {
-//        if (args.length == 0) {
-//            System.out.println("This app requires one command line argument for the albumId");
-//            System.exit(1);
-//        }
-        photoService.retrievePhotos(args[0]);
-    }
+    public static final int ERROR_CODE = 1;
 
     public static void main(String[] args) {
 
+    }
+
+    public void execute(PhotoService photoService, String... args) {
+        if (!isValidArgument(args)) {
+            exit(ERROR_CODE);
+        } else {
+            photoService.retrievePhotos(args[0]);
+        }
+    }
+
+    public void exit(int errorCode) {
+        System.exit(errorCode);
+    }
+
+    private boolean isValidArgument(String[] args) {
+        try {
+            Integer.parseInt(args[0]);
+            return true;
+        } catch (ArrayIndexOutOfBoundsException | NumberFormatException e) {
+            return false;
+        }
     }
 }
