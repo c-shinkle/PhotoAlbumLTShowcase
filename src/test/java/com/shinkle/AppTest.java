@@ -21,6 +21,7 @@ public class AppTest {
 //        consoleText = new ByteArrayOutputStream();
 //        console = System.out;
 //        System.setOut(new PrintStream(consoleText));
+        errorCode = 0;
         app = new App() {
             @Override
             public void exit(int errorCode) {
@@ -47,7 +48,7 @@ public class AppTest {
         app.execute(mockPhotoService);
 
         verifyNoInteractions(mockPhotoService);
-        assertThat(App.ERROR_CODE).isEqualTo(1);
+        assertThat(errorCode).isEqualTo(1);
     }
 
     @Test
@@ -57,6 +58,8 @@ public class AppTest {
         app.execute(mockPhotoService, "one");
 
         verifyNoInteractions(mockPhotoService);
-        assertThat(App.ERROR_CODE).isEqualTo(1);
+        assertThat(errorCode).isEqualTo(1);
     }
+
+
 }
