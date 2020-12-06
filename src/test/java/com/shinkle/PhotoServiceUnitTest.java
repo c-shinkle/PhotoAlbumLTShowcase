@@ -10,10 +10,8 @@ import org.springframework.web.reactive.function.client.WebClient.RequestHeaders
 import org.springframework.web.reactive.function.client.WebClient.RequestHeadersUriSpec;
 import reactor.core.publisher.Mono;
 
-import java.util.List;
 import java.util.function.Function;
 
-import static java.lang.String.format;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.verify;
@@ -80,14 +78,12 @@ class PhotoServiceUnitTest {
         when(requestHeadersMock.retrieve()).thenReturn(responseMock);
         when(responseMock.bodyToMono(Photo[].class)).thenReturn(Mono.just(expectedPhotos));
 
-        List<String> actualIdsAndTitles = photoService.retrievePhotosIdsAndTitles(String.valueOf(expectedAlbumId));
+        Photo[] actualPhotos = photoService.retrievePhotosIdsAndTitles(String.valueOf(expectedAlbumId));
 
         verify(webClientMock).get();
         verify(requestHeadersUriMock).uri(any(Function.class));
         verify(requestHeadersMock).retrieve();
         verify(responseMock).bodyToMono(Photo[].class);
-        assertThat(actualIdsAndTitles).containsExactly(
-                format("[%d] %s", expectedPhotoIdA, expectedPhotoTitleA),
-                format("[%d] %s", expectedPhotoIdB, expectedPhotoTitleB));
+        assertThat(actualPhotos).containsExactly(expectedPhotoA, expectedPhotoB);
     }
 }

@@ -9,9 +9,7 @@ import org.junit.jupiter.api.Test;
 import org.springframework.web.reactive.function.client.WebClient;
 
 import java.io.IOException;
-import java.util.List;
 
-import static java.lang.String.format;
 import static java.lang.String.valueOf;
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -65,10 +63,11 @@ class PhotoServiceIntegrationTest {
                 .setBody(givenBody);
         mockWebServer.enqueue(response);
 
-        List<String> actualPhotoIdsAndTitles = photoService.retrievePhotosIdsAndTitles(valueOf(expectedAlbumId));
+        Photo[] actualPhotos = photoService.retrievePhotosIdsAndTitles(valueOf(expectedAlbumId));
 
-        assertThat(actualPhotoIdsAndTitles).containsExactly(
-                format("[%d] %s", expectedPhotoIdA, expectedPhotoTitleA),
-                format("[%d] %s", expectedPhotoIdB, expectedPhotoTitleB));
+        assertThat(actualPhotos).containsExactlyInAnyOrder(
+                Photo.builder().id(expectedPhotoIdA).title(expectedPhotoTitleA).albumId(expectedAlbumId).build(),
+                Photo.builder().id(expectedPhotoIdB).title(expectedPhotoTitleB).albumId(expectedAlbumId).build()
+        );
     }
 }
