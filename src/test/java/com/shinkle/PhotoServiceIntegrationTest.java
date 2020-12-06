@@ -42,16 +42,15 @@ class PhotoServiceIntegrationTest {
         int expectedPhotoId = 101;
         String expectedPhotoTitle = "incidunt alias vel enim";
         //language=JSON
-        String givenBodyTemplate =
-                "[" +
-                        "   {" +
-                        "       \"albumId\": %d,\n" +
-                        "       \"id\": %d,\n" +
-                        "       \"title\": \"%s\",\n" +
-                        "       \"url\": \"https://via.placeholder.com/600/e743b\",\n" +
-                        "       \"thumbnailUrl\": \"https://via.placeholder.com/150/e743b\"" +
-                        "   }" +
-                        "]";
+        String givenBodyTemplate = "[" +
+                "   {" +
+                "       \"albumId\": %d,\n" +
+                "       \"id\": %d,\n" +
+                "       \"title\": \"%s\",\n" +
+                "       \"url\": \"https://via.placeholder.com/600/e743b\",\n" +
+                "       \"thumbnailUrl\": \"https://via.placeholder.com/150/e743b\"" +
+                "   }" +
+                "]";
         MockResponse response = new MockResponse()
                 .setHeader("Content-Type", "application/json")
                 .setBody(format(givenBodyTemplate, expectedAlbumId, expectedPhotoId, expectedPhotoTitle));

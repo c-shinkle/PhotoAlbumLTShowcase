@@ -10,8 +10,10 @@ import org.springframework.web.reactive.function.client.WebClient.RequestHeaders
 import org.springframework.web.reactive.function.client.WebClient.RequestHeadersUriSpec;
 import reactor.core.publisher.Mono;
 
+import java.util.List;
 import java.util.function.Function;
 
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
@@ -37,17 +39,43 @@ class PhotoServiceUnitTest {
 
     @Test
     void shouldCallOnlineWebService() {
-        Photo expectedPhoto = Photo.builder().build();
+        PhotoList expectedPhotoList = PhotoList.builder().build();
         when(webClientMock.get()).thenReturn(requestHeadersUriMock);
         when(requestHeadersUriMock.uri(any(Function.class))).thenReturn(requestHeadersMock);
         when(requestHeadersMock.retrieve()).thenReturn(responseMock);
-        when(responseMock.bodyToMono(Photo.class)).thenReturn(Mono.just(expectedPhoto));
+        when(responseMock.bodyToMono(PhotoList.class)).thenReturn(Mono.just(expectedPhotoList));
 
         photoService.retrievePhotosIdsAndTitles("3");
 
         verify(webClientMock).get();
         verify(requestHeadersUriMock).uri(any(Function.class));
         verify(requestHeadersMock).retrieve();
-        verify(responseMock).bodyToMono(Photo.class);
+        verify(responseMock).bodyToMono(PhotoList.class);
+    }
+
+    @Test
+    void shouldBuildListOfIdsAndTitles() {
+        int expectedPhotoId = 1;
+        int expectedAlbumId = 3;
+        String expectedPhotoTitle = "Lorem ipsum";
+        PhotoList expectedPhotoList = PhotoList.builder()
+                .photo(Photo.builder()
+                        .id(expectedPhotoId)
+                        .albumId(expectedAlbumId)
+                        .title(expectedPhotoTitle)
+                        .build())
+                .build();
+        when(webClientMock.get()).thenReturn(requestHeadersUriMock);
+        when(requestHeadersUriMock.uri(any(Function.class))).thenReturn(requestHeadersMock);
+        when(requestHeadersMock.retrieve()).thenReturn(responseMock);
+        when(responseMock.bodyToMono(PhotoList.class)).thenReturn(Mono.just(expectedPhotoList));
+
+        List<String> actualIdsAndTitles = photoService.retrievePhotosIdsAndTitles(String.valueOf(expectedAlbumId));
+
+        verify(webClientMock).get();
+        verify(requestHeadersUriMock).uri(any(Function.class));
+        verify(requestHeadersMock).retrieve();
+        verify(responseMock).bodyToMono(PhotoList.class);
+        assertThat(actualIdsAndTitles).containsExactly(String.format("[%d] %s", expectedPhotoId, expectedPhotoTitle));
     }
 }

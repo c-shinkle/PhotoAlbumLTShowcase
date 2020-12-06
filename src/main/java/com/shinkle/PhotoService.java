@@ -1,8 +1,11 @@
 package com.shinkle;
 
 import org.springframework.web.reactive.function.client.WebClient;
+import reactor.core.publisher.Mono;
 
 import java.util.List;
+import java.util.Objects;
+import java.util.stream.Collectors;
 
 public class PhotoService {
 
@@ -13,11 +16,15 @@ public class PhotoService {
     }
 
     public List<String> retrievePhotosIdsAndTitles(String albumId) {
-        webClient.get()
+        Mono<PhotoList> photoListMono = webClient.get()
                 .uri(uriBuilder -> uriBuilder.path("/photos").queryParam("albumId", albumId).build())
                 .retrieve()
-                .bodyToMono(Photo.class);
+                .bodyToMono(PhotoList.class);
 
-        return null;
+        PhotoList photoList = photoListMono.block();
+
+        return Objects.requireNonNull(photoList).getPhotos().stream()
+                .map((photo -> String.format("[%d] %s", photo.getId(), photo.getTitle())))
+                .collect(Collectors.toList());
     }
 }
