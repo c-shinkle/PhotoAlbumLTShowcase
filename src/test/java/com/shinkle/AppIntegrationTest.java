@@ -34,8 +34,8 @@ public class AppIntegrationTest {
     void shouldDisplayListOfPhotoIdsAndTitles() {
         App.main(new String[]{"3"});
 
-        String actualConsoleOutput = "[53] soluta et harum aliquid officiis ab omnis consequatur";
-        assertThat(actualConsoleOutput).isEqualTo(consoleText.toString());
+        String expectedConsoleOutput = "[101] incidunt alias vel enim";
+        assertThat(consoleText.toString()).contains(expectedConsoleOutput);
         assertThat(actualErrorCode).isEqualTo(0);
     }
 }
