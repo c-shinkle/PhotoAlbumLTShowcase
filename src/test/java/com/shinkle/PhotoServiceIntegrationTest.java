@@ -39,26 +39,36 @@ class PhotoServiceIntegrationTest {
     @Test
     void shouldReturnListOfPhotoIdsAndTitles() {
         int expectedAlbumId = 3;
-        int expectedPhotoId = 101;
-        String expectedPhotoTitle = "incidunt alias vel enim";
+        int expectedPhotoIdA = 101;
+        int expectedPhotoIdB = 102;
+        String expectedPhotoTitleA = "incidunt alias vel enim";
+        String expectedPhotoTitleB = "eaque iste corporis tempora vero distinctio consequuntur nisi nesciunt";
         //language=JSON
-        String givenBodyTemplate = "[" +
+        String givenBody = "[" +
                 "   {" +
-                "       \"albumId\": %d,\n" +
-                "       \"id\": %d,\n" +
-                "       \"title\": \"%s\",\n" +
+                "       \"albumId\": " + expectedAlbumId + ",\n" +
+                "       \"id\": " + expectedPhotoIdA + ",\n" +
+                "       \"title\": \"" + expectedPhotoTitleA + "\",\n" +
+                "       \"url\": \"https://via.placeholder.com/600/e743b\",\n" +
+                "       \"thumbnailUrl\": \"https://via.placeholder.com/150/e743b\"" +
+                "   }," +
+                "   {" +
+                "       \"albumId\": " + expectedAlbumId + ",\n" +
+                "       \"id\": " + expectedPhotoIdB + ",\n" +
+                "       \"title\": \"" + expectedPhotoTitleB + "\",\n" +
                 "       \"url\": \"https://via.placeholder.com/600/e743b\",\n" +
                 "       \"thumbnailUrl\": \"https://via.placeholder.com/150/e743b\"" +
                 "   }" +
                 "]";
         MockResponse response = new MockResponse()
                 .setHeader("Content-Type", "application/json")
-                .setBody(format(givenBodyTemplate, expectedAlbumId, expectedPhotoId, expectedPhotoTitle));
+                .setBody(givenBody);
         mockWebServer.enqueue(response);
 
         List<String> actualPhotoIdsAndTitles = photoService.retrievePhotosIdsAndTitles(valueOf(expectedAlbumId));
 
-        assertThat(actualPhotoIdsAndTitles)
-                .containsAnyOf(String.format("[%d] %s", expectedPhotoId, expectedPhotoTitle));
+        assertThat(actualPhotoIdsAndTitles).containsExactly(
+                format("[%d] %s", expectedPhotoIdA, expectedPhotoTitleA),
+                format("[%d] %s", expectedPhotoIdB, expectedPhotoTitleB));
     }
 }
