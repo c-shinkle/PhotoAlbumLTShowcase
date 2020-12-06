@@ -42,7 +42,7 @@ public class AppUnitTest {
         app.execute(mockPhotoService);
 
         verifyNoInteractions(mockPhotoService);
-        assertThat(actualErrorCode).isEqualTo(1);
+        assertThat(actualErrorCode).isEqualTo(App.ERROR_CODE);
     }
 
     @Test
