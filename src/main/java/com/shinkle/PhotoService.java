@@ -3,7 +3,8 @@ package com.shinkle;
 import org.springframework.web.reactive.function.client.WebClient;
 import reactor.core.publisher.Mono;
 
-import java.util.Objects;
+import java.util.Arrays;
+import java.util.List;
 
 public class PhotoService {
 
@@ -13,13 +14,14 @@ public class PhotoService {
         this.webClient = webClient;
     }
 
-    public Photo[] retrievePhotosIdsAndTitles(String albumId) {
-        Mono<Photo[]> photoArrayMono = webClient.get()
+    public List<Photo> retrievePhotosIdsAndTitles(String albumId) {
+        Mono<List<Photo>> photoArrayMono = webClient.get()
                 .uri(uriBuilder -> uriBuilder.path("/photos").queryParam("albumId", albumId).build())
                 .retrieve()
-                .bodyToMono(Photo[].class);
+                .bodyToMono(Photo[].class)
+                .flatMapIterable(Arrays::asList)
+                .collectList();
 
-        Photo[] photos = photoArrayMono.block();
-        return Objects.requireNonNull(photos);
+        return photoArrayMono.block();
     }
 }

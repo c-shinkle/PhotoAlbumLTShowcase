@@ -10,6 +10,7 @@ import org.springframework.web.reactive.function.client.WebClient.RequestHeaders
 import org.springframework.web.reactive.function.client.WebClient.RequestHeadersUriSpec;
 import reactor.core.publisher.Mono;
 
+import java.util.List;
 import java.util.function.Function;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -78,12 +79,12 @@ class PhotoServiceUnitTest {
         when(requestHeadersMock.retrieve()).thenReturn(responseMock);
         when(responseMock.bodyToMono(Photo[].class)).thenReturn(Mono.just(expectedPhotos));
 
-        Photo[] actualPhotos = photoService.retrievePhotosIdsAndTitles(String.valueOf(expectedAlbumId));
+        List<Photo> actualPhotoList = photoService.retrievePhotosIdsAndTitles(String.valueOf(expectedAlbumId));
 
         verify(webClientMock).get();
         verify(requestHeadersUriMock).uri(any(Function.class));
         verify(requestHeadersMock).retrieve();
         verify(responseMock).bodyToMono(Photo[].class);
-        assertThat(actualPhotos).containsExactly(expectedPhotoA, expectedPhotoB);
+        assertThat(actualPhotoList).containsExactly(expectedPhotoA, expectedPhotoB);
     }
 }

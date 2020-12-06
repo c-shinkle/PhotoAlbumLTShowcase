@@ -9,6 +9,7 @@ import org.junit.jupiter.api.Test;
 import org.springframework.web.reactive.function.client.WebClient;
 
 import java.io.IOException;
+import java.util.List;
 
 import static java.lang.String.valueOf;
 import static org.assertj.core.api.Assertions.assertThat;
@@ -63,9 +64,9 @@ class PhotoServiceIntegrationTest {
                 .setBody(givenBody);
         mockWebServer.enqueue(response);
 
-        Photo[] actualPhotos = photoService.retrievePhotosIdsAndTitles(valueOf(expectedAlbumId));
+        List<Photo> actualPhotoList = photoService.retrievePhotosIdsAndTitles(valueOf(expectedAlbumId));
 
-        assertThat(actualPhotos).containsExactlyInAnyOrder(
+        assertThat(actualPhotoList).containsExactlyInAnyOrder(
                 Photo.builder().id(expectedPhotoIdA).title(expectedPhotoTitleA).albumId(expectedAlbumId).build(),
                 Photo.builder().id(expectedPhotoIdB).title(expectedPhotoTitleB).albumId(expectedAlbumId).build()
         );

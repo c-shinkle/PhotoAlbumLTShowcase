@@ -3,6 +3,8 @@ package com.shinkle;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
+import java.util.Collections;
+
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.*;
 
@@ -26,11 +28,11 @@ public class AppUnitTest {
     void shouldCallPhotoServiceWithArgs() {
         String expectedAlbumId = "1";
         PhotoService mockPhotoService = mock(PhotoService.class);
-        when(mockPhotoService.retrievePhotosIdsAndTitles(expectedAlbumId)).thenReturn(new Photo[]{});
+        when(mockPhotoService.retrievePhotosIdsAndTitles(expectedAlbumId)).thenReturn(Collections.emptyList());
 
         app.execute(mockPhotoService, expectedAlbumId);
 
-        verify(mockPhotoService, only()).retrievePhotosIdsAndTitles(expectedAlbumId);
+        verify(mockPhotoService, atMostOnce()).retrievePhotosIdsAndTitles(expectedAlbumId);
     }
 
     @Test

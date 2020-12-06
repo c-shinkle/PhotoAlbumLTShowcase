@@ -11,13 +11,10 @@ public class App {
     }
 
     public void execute(PhotoService photoService, String... args) {
-        if (!isValidArgument(args)) {
-            exit(ERROR_CODE);
+        if (isValidArgument(args)) {
+            photoService.retrievePhotosIdsAndTitles(args[0]).forEach(System.out::println);
         } else {
-            Photo[] photos = photoService.retrievePhotosIdsAndTitles(args[0]);
-            for (Photo p : photos) {
-                System.out.println(p);
-            }
+            exit(ERROR_CODE);
         }
     }
 
