@@ -8,7 +8,7 @@ how to use Spring's WebClient to retrieve data from a REST API.
 This Java app is built using Gradle 6.7.1 and is run with Java 11. Information about installing gradle can be found
 [here](https://gradle.org/install/). While I already had Gradle installed on my local machine, it appears that the
 Gradle wrapper likes to install itself by just running the app. If you're feeling lucky, you may be able to install
-everything by just running on of the commands listed below.
+everything by just running one of the commands listed below.
 
 ### Windows
 
